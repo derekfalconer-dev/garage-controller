@@ -1,32 +1,30 @@
 """Configuration for the garage-door controller."""
 
-# GPIO numbering uses BCM numbers, not physical header pin numbers.
-REED_GPIO = 17       # Physical pin 11
-RELAY_GPIO = 23      # Physical pin 16
+# GPIO numbering uses BCM numbers.
+REED_GPIO = 17
+RELAY_GPIO = 23
 
-# Reed switch wiring:
-# GPIO17 ---- reed switch ---- GND
-#
-# Internal pull-up is enabled, therefore:
-# LOW  = magnet present / door closed
-# HIGH = magnet absent / door open
-REED_ACTIVE_STATE = False
-
-# Relay module wiring:
-# 3.3V ---- DC+
-# GND  ---- DC-
-# GPIO23 ---- IN
-#
-# The opto-isolated relay board is expected to be active-low:
-# LOW  = relay energized
-# HIGH = relay released
+REED_BOUNCE_SECONDS = 0.05
 RELAY_ACTIVE_HIGH = False
-
-# Garage openers generally need only a brief momentary contact.
 RELAY_PULSE_SECONDS = 0.5
-
-# Prevent accidental repeated commands.
 RELAY_COOLDOWN_SECONDS = 5.0
 
-# Reed-switch debounce time.
-REED_BOUNCE_SECONDS = 0.05
+# Background monitoring.
+MONITOR_INTERVAL_SECONDS = 0.10
+
+# Alert after the door remains open this long.
+OPEN_ALERT_SECONDS = 10 * 60
+
+# Maximum number of recent events retained in memory.
+EVENT_HISTORY_LIMIT = 50
+
+# Web server.
+WEB_HOST = "0.0.0.0"
+WEB_PORT = 5000
+WEB_DEBUG = False
+
+# Logging.
+LOG_DIRECTORY = "logs"
+LOG_FILENAME = "garage-controller.log"
+LOG_MAX_BYTES = 1_000_000
+LOG_BACKUP_COUNT = 5

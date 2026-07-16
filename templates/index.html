@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Garage Door</title>
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='style.css') }}"
+    >
+</head>
+<body>
+    <main class="dashboard">
+        <header class="header">
+            <div>
+                <p class="eyebrow">Garage Controller</p>
+                <h1>Garage Door</h1>
+                <p id="hostname" class="hostname">—</p>
+            </div>
+
+            <div
+                id="connectionIndicator"
+                class="connection-indicator connection-pending"
+            >
+                Connecting
+            </div>
+        </header>
+
+        <section
+            id="statusCard"
+            class="status-card status-unknown"
+            aria-live="polite"
+        >
+            <div id="statusIcon" class="status-icon">?</div>
+
+            <div>
+                <p class="status-label">Current status</p>
+                <p id="doorState" class="door-state">Loading...</p>
+                <p id="stateDuration" class="state-duration"></p>
+            </div>
+        </section>
+
+        <section class="details-card">
+            <div class="detail-row">
+                <span>Last transition</span>
+                <strong id="lastTransition">—</strong>
+            </div>
+
+            <div class="detail-row">
+                <span>Last command</span>
+                <strong id="lastCommand">—</strong>
+            </div>
+
+            <div class="detail-row">
+                <span>Controller monitor</span>
+                <strong id="monitorState">—</strong>
+            </div>
+
+            <div class="detail-row">
+                <span>Command cooldown</span>
+                <strong id="cooldownState">—</strong>
+            </div>
+
+            <div class="detail-row">
+                <span>SMS alerts</span>
+                <strong id="smsState">—</strong>
+            </div>
+
+            <div class="detail-row">
+                <span>Open-door alert</span>
+                <strong id="alertState">—</strong>
+            </div>
+        </section>
+
+        <section class="control-card">
+            <button
+                id="toggleButton"
+                class="toggle-button"
+                type="button"
+                disabled
+            >
+                Operate Garage Door
+            </button>
+
+            <p class="warning">
+                This button simulates the existing wall control. It may open,
+                stop, or close the door depending on the opener’s current state.
+            </p>
+
+            <p id="message" class="message" aria-live="polite"></p>
+        </section>
+
+        <section class="events-card">
+            <div class="section-heading">
+                <div>
+                    <p class="eyebrow">Controller history</p>
+                    <h2>Recent Events</h2>
+                </div>
+            </div>
+
+            <div id="eventList" class="event-list">
+                <p class="empty-events">Loading events...</p>
+            </div>
+        </section>
+    </main>
+
+    <script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>

@@ -1,0 +1,48 @@
+2026-07-16 16:16:38,203 INFO MainThread Garage controller initialized; initial door state=CLOSED
+2026-07-16 16:16:38,205 INFO MainThread Garage monitor thread started
+2026-07-16 16:16:38,217 INFO MainThread Starting garage dashboard on 0.0.0.0:5000
+2026-07-16 16:17:22,201 INFO MainThread Received signal 2; shutting down
+2026-07-16 16:17:22,203 INFO garage-monitor Garage monitor thread stopped
+2026-07-16 16:17:22,261 INFO MainThread Garage controller closed
+2026-07-16 16:17:49,746 INFO MainThread Garage controller initialized; initial door state=CLOSED
+2026-07-16 16:17:49,748 INFO MainThread Garage monitor thread started
+2026-07-16 16:17:49,761 INFO MainThread Starting garage dashboard on 0.0.0.0:5000
+2026-07-16 16:18:29,548 INFO MainThread Received signal 2; shutting down
+2026-07-16 16:18:29,549 INFO garage-monitor Garage monitor thread stopped
+2026-07-16 16:18:29,595 INFO MainThread Garage controller closed
+2026-07-16 16:19:52,651 INFO MainThread Garage controller initialized; initial door state=CLOSED
+2026-07-16 16:19:52,653 INFO MainThread Garage monitor thread started
+2026-07-16 16:19:52,666 INFO MainThread Starting garage dashboard on 0.0.0.0:5000
+2026-07-16 16:20:10,590 INFO MainThread Received signal 2; shutting down
+2026-07-16 16:20:10,592 INFO garage-monitor Garage monitor thread stopped
+2026-07-16 16:20:10,682 INFO MainThread Garage controller closed
+2026-07-16 16:22:05,751 INFO MainThread Garage controller initialized; initial door state=CLOSED
+2026-07-16 16:22:05,753 INFO MainThread Garage monitor thread started
+2026-07-16 16:22:05,765 INFO MainThread Starting garage dashboard on 0.0.0.0:5000
+2026-07-16 16:23:02,964 INFO MainThread Received signal 2; shutting down
+2026-07-16 16:23:02,965 INFO garage-monitor Garage monitor thread stopped
+2026-07-16 16:23:03,025 INFO MainThread Garage controller closed
+2026-07-16 16:24:37,136 INFO MainThread Garage controller initialized; initial door state=CLOSED
+2026-07-16 16:24:37,138 INFO MainThread Garage monitor thread started
+2026-07-16 16:24:37,151 INFO MainThread Starting garage dashboard on 0.0.0.0:5000
+2026-07-16 16:24:49,810 INFO Thread-11 (process_request_thread) Relay pulse completed; observed door state=CLOSED
+2026-07-16 16:24:50,215 INFO garage-monitor Door state changed: CLOSED -> OPEN
+2026-07-16 16:25:20,809 INFO Thread-41 (process_request_thread) Relay pulse completed; observed door state=OPEN
+2026-07-16 16:25:32,036 INFO garage-monitor Door state changed: OPEN -> CLOSED
+2026-07-16 16:29:51,553 INFO MainThread Received signal 2; shutting down
+2026-07-16 16:29:51,555 INFO garage-monitor Garage monitor thread stopped
+2026-07-16 16:29:51,593 INFO MainThread Garage controller closed
+2026-07-16 16:34:20,428 WARNING MainThread SMS notifications disabled because one or more environment variables are missing
+2026-07-16 16:34:20,430 INFO MainThread SYSTEM_START: Controller started; door is CLOSED
+2026-07-16 16:34:20,431 INFO MainThread SMS_DISABLED: SMS alerts are not configured
+2026-07-16 16:34:20,432 INFO MainThread MONITOR_START: Background monitor started
+2026-07-16 16:34:20,447 INFO MainThread Starting garage dashboard on 0.0.0.0:5000
+2026-07-16 16:34:37,237 INFO Thread-23 (process_request_thread) RELAY_PULSE: Garage-door relay pulsed
+2026-07-16 16:34:37,645 INFO garage-monitor DOOR_OPENED: Garage door opened
+2026-07-16 16:34:37,646 INFO garage-monitor Door state changed: CLOSED -> OPEN
+2026-07-16 16:35:15,713 INFO Thread-74 (process_request_thread) RELAY_PULSE: Garage-door relay pulsed
+2026-07-16 16:35:26,946 INFO garage-monitor DOOR_CLOSED: Garage door closed
+2026-07-16 16:35:26,946 INFO garage-monitor Door state changed: OPEN -> CLOSED
+2026-07-16 16:36:14,409 INFO MainThread Received signal 2; shutting down
+2026-07-16 16:36:14,411 INFO garage-monitor Garage monitor thread stopped
+2026-07-16 16:36:14,492 INFO MainThread Garage controller closed

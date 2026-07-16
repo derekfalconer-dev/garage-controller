@@ -1,0 +1,2 @@
+print("Garage Pi ready!")
+

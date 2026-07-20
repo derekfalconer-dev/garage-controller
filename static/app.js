@@ -17,11 +17,13 @@ const elements = {
     smsState: document.getElementById("smsState"),
     alertState: document.getElementById("alertState"),
     toggleButton: document.getElementById("toggleButton"),
+    testNotificationButton: document.getElementById("testNotificationButton"),
     message: document.getElementById("message"),
     eventList: document.getElementById("eventList"),
 };
 
 let requestInProgress = false;
+let notificationTestInProgress = false;
 
 function formatDuration(totalSeconds) {
     const seconds = Math.max(0, Math.floor(totalSeconds));
@@ -216,6 +218,7 @@ async function refreshEvents() {
     }
 }
 
+
 async function operateDoor() {
     const confirmed = window.confirm(
         "Operate the garage door?\n\n" +
@@ -258,7 +261,63 @@ async function operateDoor() {
     }
 }
 
+async function testNotifications() {
+    if (notificationTestInProgress) {
+        return;
+    }
+
+    notificationTestInProgress = true;
+    elements.testNotificationButton.disabled = true;
+    elements.testNotificationButton.textContent = "Sending...";
+    showMessage("");
+
+    try {
+        const response = await fetch("/api/notifications/test", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+        });
+
+        const payload = await response.json();
+
+        if (!response.ok || !payload.ok) {
+            throw new Error(
+                payload.message || "Test notification failed."
+            );
+        }
+
+        showMessage(payload.message);
+        elements.testNotificationButton.textContent =
+            "Notification Sent";
+
+        await refreshEvents();
+    } catch (error) {
+        console.error(error);
+
+        showMessage(
+            error.message || "Test notification failed.",
+            true
+        );
+
+        elements.testNotificationButton.textContent =
+            "Notification Failed";
+    } finally {
+        window.setTimeout(() => {
+            notificationTestInProgress = false;
+            elements.testNotificationButton.disabled = false;
+            elements.testNotificationButton.textContent =
+                "Test Notifications";
+        }, 2500);
+    }
+}
+
 elements.toggleButton.addEventListener("click", operateDoor);
+
+elements.testNotificationButton.addEventListener(
+    "click",
+    testNotifications
+);
 
 refreshStatus();
 refreshEvents();

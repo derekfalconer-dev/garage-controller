@@ -1,4 +1,4 @@
-"""SMS notification support for the garage-door controller."""
+"""Push notification support for the garage-door controller."""
 
 from __future__ import annotations
 
@@ -6,7 +6,10 @@ import logging
 import os
 from dataclasses import dataclass
 
-from twilio.rest import Client
+import requests
+
+
+PUSHOVER_API_URL = "https://api.pushover.net/1/messages.json"
 
 
 @dataclass(frozen=True)
@@ -16,37 +19,22 @@ class NotificationStatus:
     destination_configured: bool
 
 
-class SMSNotifier:
-    """Send SMS alerts using credentials supplied through the environment."""
+class PushoverNotifier:
+    """Send garage alerts through Pushover."""
 
     def __init__(self, logger: logging.Logger | None = None) -> None:
         self._logger = logger or logging.getLogger(__name__)
 
-        self._account_sid = os.environ.get("TWILIO_ACCOUNT_SID", "").strip()
-        self._auth_token = os.environ.get("TWILIO_AUTH_TOKEN", "").strip()
-        self._from_number = os.environ.get("TWILIO_FROM_NUMBER", "").strip()
-        self._to_number = os.environ.get("GARAGE_SMS_TO", "").strip()
+        self._user_key = os.environ.get("PUSHOVER_USER_KEY", "").strip()
+        self._app_token = os.environ.get("PUSHOVER_APP_TOKEN", "").strip()
 
-        self._enabled = all(
-            (
-                self._account_sid,
-                self._auth_token,
-                self._from_number,
-                self._to_number,
-            )
-        )
-
-        self._client: Client | None = None
+        self._enabled = bool(self._user_key and self._app_token)
 
         if self._enabled:
-            self._client = Client(
-                username=self._account_sid,
-                password=self._auth_token,
-            )
-            self._logger.info("Twilio SMS notifications enabled")
+            self._logger.info("Pushover notifications enabled")
         else:
             self._logger.warning(
-                "SMS notifications disabled because one or more "
+                "Pushover notifications disabled because one or more "
                 "environment variables are missing"
             )
 
@@ -57,28 +45,66 @@ class SMSNotifier:
     def get_status(self) -> NotificationStatus:
         return NotificationStatus(
             enabled=self._enabled,
-            provider="Twilio",
-            destination_configured=bool(self._to_number),
+            provider="Pushover",
+            destination_configured=bool(self._user_key),
         )
 
-    def send(self, message: str) -> bool:
-        """Send one SMS message. Return True only if Twilio accepts it."""
-        if not self._enabled or self._client is None:
+    def send(
+        self,
+        message: str,
+        *,
+        title: str = "Garage Controller",
+        priority: int = 1,
+    ) -> bool:
+        """Send one notification and return True if Pushover accepts it."""
+
+        if not self._enabled:
             self._logger.warning(
-                "SMS not sent because notifications are disabled: %s",
+                "Notification not sent because Pushover is disabled: %s",
                 message,
             )
             return False
 
         try:
-            result = self._client.messages.create(
-                body=message,
-                from_=self._from_number,
-                to=self._to_number,
+            response = requests.post(
+                PUSHOVER_API_URL,
+                data={
+                    "token": self._app_token,
+                    "user": self._user_key,
+                    "title": title,
+                    "message": message,
+                    "priority": priority,
+                },
+                timeout=10,
             )
-        except Exception:
-            self._logger.exception("SMS send failed")
+        except requests.RequestException:
+            self._logger.exception("Pushover request failed")
             return False
 
-        self._logger.info("SMS accepted by Twilio; SID=%s", result.sid)
+        try:
+            response_data = response.json()
+        except ValueError:
+            self._logger.error(
+                "Pushover returned invalid JSON: HTTP %s body=%r",
+                response.status_code,
+                response.text[:500],
+            )
+            return False
+
+        if response.status_code != 200 or response_data.get("status") != 1:
+            self._logger.error(
+                "Pushover rejected notification: HTTP %s response=%s",
+                response.status_code,
+                response_data,
+            )
+            return False
+
+        self._logger.info(
+            "Notification accepted by Pushover; request=%s",
+            response_data.get("request", "unknown"),
+        )
         return True
+
+
+# Preserve compatibility with existing code that imports SMSNotifier.
+SMSNotifier = PushoverNotifier

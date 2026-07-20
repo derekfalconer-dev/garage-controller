@@ -85,6 +85,30 @@ def api_events() -> Any:
     )
 
 
+@app.post("/api/notifications/test")
+def api_test_notification() -> tuple[Any, int] | Any:
+    """Send an on-demand test notification."""
+    sent = controller.send_test_notification()
+
+    if sent:
+        return jsonify(
+            {
+                "ok": True,
+                "message": "Test notification sent.",
+            }
+        )
+
+    return (
+        jsonify(
+            {
+                "ok": False,
+                "message": "Test notification failed.",
+            }
+        ),
+        503,
+    )
+
+
 @app.post("/api/toggle")
 def api_toggle() -> tuple[Any, int] | Any:
     """Request one momentary garage-door relay pulse."""

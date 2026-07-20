@@ -317,6 +317,37 @@ class GarageController:
                 ),
             )
 
+    def send_test_notification(self) -> bool:
+        """Send an on-demand notification from the dashboard."""
+
+        with self._lock:
+            self._ensure_open()
+
+            message = (
+                f"Garage Controller test from {self._hostname}: "
+                f"notifications are operational. "
+                f"Door is currently {self._current_state.value}."
+            )
+
+            sent = self._notifier.send(
+                message,
+                title="Garage Controller Test",
+            )
+
+            if sent:
+                self._record_event(
+                    "NOTIFICATION_TEST_SENT",
+                    "Test notification sent successfully",
+                )
+            else:
+                self._record_event(
+                    "NOTIFICATION_TEST_FAILED",
+                    "Test notification could not be sent",
+                )
+
+            return sent
+
+
     def request_toggle(self) -> CommandResult:
         with self._lock:
             self._ensure_open()
